@@ -1,231 +1,108 @@
 /**
  * DISCOVER SYSTEM
- * Sistema de descubrimiento de juegos
+ * Everything here is generated from GAMES in games-config.js.
  */
-
-// Textos para el sistema Discover
 const DISCOVER_COPY = {
-  es: {
-    discover: "discover",
-    gameOfDay: "Game of the Day",
-    newReleases: "New Releases",
-    updated: "UPDATED",
-    playNow: "PLAY NOW",
-    play: "PLAY",
-    difficulty: "Difficulty",
-    youMayAlsoLike: "You May Also Like",
-    searchPlaceholder: "Search games...",
-    noGamesFound: "No games found",
-    allGames: "All Games",
-    freeBrowserGames: "Free Browser Games",
-    playDirectly: "Play free games directly in your browser. No download required."
-  },
-  pt: {
-    discover: "descubra",
-    gameOfDay: "Jogo do Dia",
-    newReleases: "Lançamentos Recentes",
-    updated: "ATUALIZADO",
-    playNow: "JOGAR AGORA",
-    play: "JOGAR",
-    difficulty: "Dificuldade",
-    youMayAlsoLike: "Você Também Pode Gostar",
-    searchPlaceholder: "Procurar jogos...",
-    noGamesFound: "Nenhum jogo encontrado",
-    allGames: "Todos os Jogos",
-    freeBrowserGames: "Jogos Grátis no Navegador",
-    playDirectly: "Jogue jogos grátis diretamente no seu navegador. Sem download necessário."
-  },
-  en: {
-    discover: "discover",
-    gameOfDay: "Game of the Day",
-    newReleases: "New Releases",
-    updated: "UPDATED",
-    playNow: "PLAY NOW",
-    play: "PLAY",
-    difficulty: "Difficulty",
-    youMayAlsoLike: "You May Also Like",
-    searchPlaceholder: "Search games...",
-    noGamesFound: "No games found",
-    allGames: "All Games",
-    freeBrowserGames: "Free Browser Games",
-    playDirectly: "Play free games directly in your browser. No download required."
-  }
+  es: { subtitle: "Encuentra tu próximo juego favorito.", gameOfDay: "GAME OF THE DAY", playNow: "PLAY NOW", play: "PLAY", difficulty: "Dificultad", updated: "UPDATED", newReleases: "NEW RELEASES", allGames: "ALL GAMES", search: "Search games...", noGamesFound: "No games found" },
+  pt: { subtitle: "Encontre seu próximo jogo favorito.", gameOfDay: "JOGO DO DIA", playNow: "JOGAR AGORA", play: "JOGAR", difficulty: "Dificuldade", updated: "ATUALIZADO", newReleases: "LANÇAMENTOS", allGames: "TODOS OS JOGOS", search: "Procurar jogos...", noGamesFound: "Nenhum jogo encontrado" },
+  en: { subtitle: "Find your next favorite game.", gameOfDay: "GAME OF THE DAY", playNow: "PLAY NOW", play: "PLAY", difficulty: "Difficulty", updated: "UPDATED", newReleases: "NEW RELEASES", allGames: "ALL GAMES", search: "Search games...", noGamesFound: "No games found" }
 };
 
-let currentLang = localStorage.getItem('felipe-lang') || 'es';
-let currentFilter = 'all';
-let currentSearch = '';
+let discoverLang = localStorage.getItem("felipe-lang") || "es";
+let discoverFilter = "all";
+let discoverSearch = "";
+const DISCOVER_CATEGORIES = ["all", "action", "arcade", "sports", "casual", "other"];
 
-// Renderizar tarjeta de juego
-function renderGameCard(game, langId) {
-  const t = DISCOVER_COPY[langId];
-  const diffStars = '★'.repeat(game.difficulty) + '☆'.repeat(5 - game.difficulty);
-  const tags = game.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-  const updatedBadge = game.updated ? `<span class="game-updated-badge">${t.updated}</span>` : '';
-  
-  return `
-    <div class="game-card">
-      <div class="game-image-container">
-        <img src="${game.image}" alt="${game.name[langId]}" class="game-image" />
-        ${updatedBadge}
-      </div>
-      <div class="game-info">
-        <h3 class="game-name">${game.name[langId]}</h3>
-        <p class="game-genre">${game.genre}</p>
-        <p class="game-description">${game.description[langId]}</p>
-        <div class="game-meta">
-          <span class="difficulty-badge" title="${t.difficulty}">${diffStars}</span>
-        </div>
-        <div class="game-tags">${tags}</div>
-        <a href="${game.url}" target="_blank" rel="noopener" class="btn game-play-btn">${t.play}</a>
-      </div>
+function textFor(game, lang) { return game[lang] || game.en || game.es || ""; }
+function categoryMatch(game, category) {
+  if (category === "all") return true;
+  const values = [String(game.genre || ""), ...(game.tags || [])].map(v => v.toLowerCase());
+  if (category === "other") return !values.some(v => ["action", "arcade", "sports", "casual"].includes(v));
+  return values.includes(category);
+}
+function gameMatchesSearch(game, query, lang) {
+  if (!query) return true;
+  const q = query.toLowerCase().trim();
+  return [textFor(game.name, lang), textFor(game.description, lang), game.genre, game.keywords, ...(game.tags || [])]
+    .join(" ").toLowerCase().includes(q);
+}
+function getDiscoverGames() {
+  return GAMES.filter(g => categoryMatch(g, discoverFilter) && gameMatchesSearch(g, discoverSearch, discoverLang));
+}
+function gameCard(game, lang) {
+  const t = DISCOVER_COPY[lang];
+  const stars = "★".repeat(Math.max(0, Math.min(5, game.difficulty || 1))) + "☆".repeat(5 - Math.max(0, Math.min(5, game.difficulty || 1)));
+  return `<article class="game-card">
+    <a class="game-image-link" href="${getGameUrl(game.id)}" aria-label="${textFor(game.name, lang)}">
+      <div class="game-image-container"><img src="${game.image}" alt="Preview of ${textFor(game.name, lang)}" class="game-image" loading="lazy">${game.updated ? `<span class="game-updated-badge">${t.updated}</span>` : ""}</div>
+    </a>
+    <div class="game-info">
+      <div class="game-card-title"><h3 class="game-name">${textFor(game.name, lang)}</h3>${game.updated ? `<span class="game-mini-updated">${t.updated}</span>` : ""}</div>
+      <p class="game-genre">${game.genre}</p>
+      <p class="game-description">${textFor(game.description, lang)}</p>
+      <div class="game-meta"><span class="difficulty-badge" title="${t.difficulty}">${stars}</span></div>
+      <div class="game-tags">${(game.tags || []).map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+      <a href="${getGameUrl(game.id)}" class="btn game-play-btn">${t.play}</a>
     </div>
-  `;
+  </article>`;
+}
+function featuredCard(lang) {
+  const t = DISCOVER_COPY[lang];
+  const game = getFeaturedGame();
+  if (!game) return "";
+  return `<div class="featured-game"><div class="featured-content"><h2 class="featured-title">${t.gameOfDay}</h2><div class="featured-body">
+    <img src="${game.image}" alt="Preview of ${textFor(game.name, lang)}" class="featured-image">
+    <div class="featured-text"><div class="featured-header"><h3 class="featured-name">${textFor(game.name, lang)}</h3>${game.updated ? `<span class="badge-updated">${t.updated}</span>` : ""}</div>
+    <p class="featured-genre">${game.genre} · ${(game.tags || []).slice(0,2).join(" · ")}</p><p class="featured-description">${textFor(game.description, lang)}</p>
+    <div class="featured-tags">${(game.tags || []).map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+    <a href="${getGameUrl(game.id)}" class="btn btn-large">${t.playNow}</a></div></div></div></div>`;
+}
+function newReleaseCards(lang) {
+  return [...GAMES].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0,6).map(g => gameCard(g,lang)).join("");
+}
+function renderDiscover() {
+  const t = DISCOVER_COPY[discoverLang];
+  const featured = document.getElementById("discoverFeatured");
+  const games = document.getElementById("discoverGames");
+  const releases = document.getElementById("newReleasesGames");
+  const filters = document.getElementById("discoverFilters");
+  const search = document.getElementById("gameSearch");
+  if (!featured) return;
+  document.getElementById("discoverSubtitle").textContent = t.subtitle;
+  document.getElementById("newReleasesTitle").textContent = t.newReleases;
+  document.getElementById("allGamesTitle").textContent = t.allGames;
+  featured.innerHTML = featuredCard(discoverLang);
+  filters.innerHTML = DISCOVER_CATEGORIES.map(cat => `<button class="chip${discoverFilter === cat ? " active" : ""}" data-discover-category="${cat}">${cat === "all" ? "ALL" : cat.toUpperCase()}</button>`).join("");
+  if (search) search.placeholder = t.search;
+  const visible = getDiscoverGames();
+  games.innerHTML = visible.length ? visible.map(g => gameCard(g, discoverLang)).join("") : `<div class="no-results">${t.noGamesFound}</div>`;
+  releases.innerHTML = newReleaseCards(discoverLang);
 }
 
-// Renderizar sección de juego destacado
-function renderFeaturedGame(langId) {
-  const t = DISCOVER_COPY[langId];
-  const featured = getFeaturedGame();
-  const updatedBadge = featured.updated ? `<span class="badge-updated">${t.updated}</span>` : '';
-  
-  return `
-    <div class="featured-game">
-      <div class="featured-content">
-        <h2 class="featured-title">${t.gameOfDay}</h2>
-        <div class="featured-body">
-          <img src="${featured.image}" alt="${featured.name[langId]}" class="featured-image" />
-          <div class="featured-text">
-            <div class="featured-header">
-              <h3 class="featured-name">${featured.name[langId]}</h3>
-              ${updatedBadge}
-            </div>
-            <p class="featured-genre">${featured.genre}</p>
-            <p class="featured-description">${featured.description[langId]}</p>
-            <div class="featured-tags">
-              ${featured.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-            <a href="${featured.url}" target="_blank" rel="noopener" class="btn btn-large">${t.playNow}</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+function updateDiscoverLanguage(lang) {
+  discoverLang = DISCOVER_COPY[lang] ? lang : "es";
+  localStorage.setItem("felipe-lang", discoverLang);
+  renderDiscover();
 }
 
-// Renderizar filtros
-function renderFilters(langId) {
-  const categories = ['all', ...getAllCategories()];
-  const t = DISCOVER_COPY[langId];
-  
-  return categories.map(cat => {
-    const label = cat === 'all' ? t.allGames : cat;
-    const active = currentFilter === cat ? 'active' : '';
-    return `<button class="chip ${active}" data-category="${cat}">${label}</button>`;
-  }).join('');
-}
-
-// Filtrar y renderizar juegos
-function renderGamesGrid(langId) {
-  let games = GAMES;
-  
-  // Aplicar filtro de categoría
-  if (currentFilter !== 'all') {
-    games = games.filter(g => g.tags.includes(currentFilter));
-  }
-  
-  // Aplicar búsqueda
-  if (currentSearch) {
-    games = searchGames(currentSearch, langId);
-  }
-  
-  const t = DISCOVER_COPY[langId];
-  
-  if (games.length === 0) {
-    return `<div class="no-results">${t.noGamesFound}</div>`;
-  }
-  
-  return games.map(game => renderGameCard(game, langId)).join('');
-}
-
-// Renderizar juegos relacionados
-function renderRelatedGames(gameId, langId) {
-  const related = getRelatedGames(gameId, 3);
-  const t = DISCOVER_COPY[langId];
-  
-  if (related.length === 0) return '';
-  
-  const cards = related.map(game => `
-    <div class="related-game-card">
-      <img src="${game.image}" alt="${game.name[langId]}" class="related-image" />
-      <h4>${game.name[langId]}</h4>
-      <a href="${game.url}" target="_blank" rel="noopener" class="btn small">${t.play}</a>
-    </div>
-  `).join('');
-  
-  return `
-    <section class="related-games">
-      <h3>${t.youMayAlsoLike}</h3>
-      <div class="related-grid">${cards}</div>
-    </section>
-  `;
-}
-
-// Actualizar vista de Discover
-function updateDiscover(langId = currentLang) {
-  currentLang = langId;
-  
-  const featuredEl = document.getElementById('discoverFeatured');
-  const filtersEl = document.getElementById('discoverFilters');
-  const gamesEl = document.getElementById('discoverGames');
-  
-  if (featuredEl) featuredEl.innerHTML = renderFeaturedGame(langId);
-  if (filtersEl) filtersEl.innerHTML = renderFilters(langId);
-  if (gamesEl) gamesEl.innerHTML = renderGamesGrid(langId);
-  
-  // Re-attach event listeners
-  attachDiscoverListeners(langId);
-}
-
-// Eventos
-function attachDiscoverListeners(langId) {
-  // Filtros de categoría
-  document.querySelectorAll('#discoverFilters .chip').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      document.querySelectorAll('#discoverFilters .chip').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      currentFilter = e.target.dataset.category;
-      currentSearch = '';
-      document.getElementById('gameSearch').value = '';
-      updateDiscover(langId);
-    });
-  });
-  
-  // Buscador
-  const searchInput = document.getElementById('gameSearch');
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      currentSearch = e.target.value;
-      if (currentSearch) {
-        document.querySelectorAll('#discoverFilters .chip').forEach(b => b.classList.remove('active'));
-        currentFilter = 'all';
-      }
-      updateDiscover(langId);
-    });
-  }
-}
-
-// Inicializar Discover
 function initDiscover() {
-  const discoverSection = document.getElementById('discover');
-  if (!discoverSection) return;
-  
-  updateDiscover(currentLang);
+  if (!document.getElementById("discover")) return;
+  const filters = document.getElementById("discoverFilters");
+  const search = document.getElementById("gameSearch");
+  filters.addEventListener("click", e => {
+    const button = e.target.closest("[data-discover-category]");
+    if (!button) return;
+    discoverFilter = button.dataset.discoverCategory;
+    renderDiscover();
+  });
+  search.addEventListener("input", e => { discoverSearch = e.target.value; renderDiscover(); });
+  const langs = document.getElementById("langs");
+  if (langs) langs.addEventListener("click", e => {
+    const button = e.target.closest("[data-lang]");
+    if (button) setTimeout(() => updateDiscoverLanguage(button.dataset.lang), 0);
+  });
+  renderDiscover();
 }
 
-// Llamar después de que el DOM esté listo
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initDiscover);
-} else {
-  initDiscover();
-}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initDiscover);
+else initDiscover();
