@@ -1,155 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Felipe — dev</title>
-  <meta name="description" content="Portfolio de Felipe: sitios y juegos web gratuitos, rápidos y sin anuncios." />
-  <meta name="theme-color" content="#090b10" />
-  <meta property="og:title" content="Felipe — dev" />
-  <meta property="og:description" content="Sitios y juegos web gratuitos, rápidos y sin anuncios." />
-  <meta property="og:type" content="website" />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Felipe — dev</title><meta name="description" content="Portfolio de Felipe: sitios y juegos web gratuitos, rápidos y sin anuncios." /><meta name="theme-color" content="#090b10" />
+  <meta property="og:title" content="Felipe — dev" /><meta property="og:description" content="Sitios y juegos web gratuitos, rápidos y sin anuncios." /><meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" /><link rel="stylesheet" href="styles.css" />
   <!-- INSERT ANALYTICS CODE HERE -->
-</head>
-<body>
-  <div class="noise"></div>
-
-  <nav class="tabbar" id="tabbar">
-    <div class="brand"><span class="dot"></span> felipe.dev</div>
-    <div class="tabs">
-      <button class="tab active" data-target="#inicio"><span class="ext-html">&lt;/&gt;</span> index.html</button>
-      <button class="tab" data-target="#sitios"><span class="ext-js">[]</span> sitios.json</button>
-      <button class="tab" data-target="#discover"><span class="ext-js">*</span> discover.js</button>
-      <a class="tab" href="free-browser-games.html"><span class="ext-html">[]</span> games.html</a>
-      <button class="tab" data-target="#sobre-mi"><span class="ext-js">JS</span> sobre-mi.js</button>
-      <button class="tab" data-target="#habilidades"><span class="ext-html">{}</span> habilidades.css</button>
-      <button class="tab" data-target="#objetivos"><span class="ext-md">#</span> objetivos.md</button>
-      <button class="tab" data-target="#donaciones"><span class="ext-js">$</span> donaciones.json</button>
-    </div>
-    <div class="langs" id="langs">
-      <button type="button" data-lang="es" class="active">ES</button>
-      <button type="button" data-lang="pt">PT</button>
-      <button type="button" data-lang="en">EN</button>
-    </div>
-  </nav>
-
-  <header class="wrap" id="inicio">
-    <div class="editor">
-      <div class="titlebar">
-        <span class="tl"></span><span class="tl"></span><span class="tl"></span>
-        <span class="filename">index.html — felipe.dev</span>
-      </div>
-      <div class="editor-body">
-        <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6</div>
-        <div class="code">
-          <div class="cm" id="heroComment"><!-- perfil de desarrollador --></div>
-          <div><span class="kw">const</span> <span class="fn">dev</span> = {</div>
-          <div>&nbsp;&nbsp;<span class="prop">nombre:</span> <span class="str">"Felipe"</span>,</div>
-          <div>&nbsp;&nbsp;<span class="prop">edad:</span> <span class="str">14</span>,</div>
-          <div>&nbsp;&nbsp;<span class="prop">stack:</span> [<span class="str">"HTML"</span>, <span class="str">"JavaScript"</span>]</div>
-          <div>};</div>
-        </div>
-      </div>
-    </div>
-
-    <h1 class="name" id="typedName">Felipe</h1>
-    <p class="tagline" id="heroTagline"></p>
-    <div class="ctas">
-      <a href="#sitios" class="btn primary" id="ctaProjects">Ver proyectos</a>
-      <a href="#donaciones" class="btn" id="ctaDonate">Donar</a>
-    </div>
-  </header>
-
-  <section class="wrap" id="sitios">
-    <div class="section-head">
-      <span class="path">~/felipe/</span>
-      <h2 id="secSitios">sitios<span class="ext">.json</span></h2>
-    </div>
-    <div class="filters" id="filters"></div>
-    <div class="sites-grid" id="sitesGrid"></div>
-  </section>
-
-  <section class="wrap discover-section" id="discover">
-    <div class="section-head">
-      <span class="path">~/felipe/</span>
-      <h2><span id="discoverTitle">DISCOVER</span><span class="ext">.js</span></h2>
-    </div>
-    <p class="discover-subtitle" id="discoverSubtitle">Find your next favorite game.</p>
-    <div id="discoverFeatured"></div>
-    <div class="discover-toolbar">
-      <div class="game-search-wrap">
-        <span>⌕</span>
-        <input id="gameSearch" type="search" placeholder="Search games..." autocomplete="off" />
-      </div>
-      <div class="discover-filters" id="discoverFilters"></div>
-    </div>
-    <div class="discover-block">
-      <div class="discover-block-head"><h3 id="newReleasesTitle">NEW RELEASES</h3><a href="free-browser-games.html" class="mini-link">VIEW ALL →</a></div>
-      <div class="game-grid" id="newReleasesGames"></div>
-    </div>
-    <div class="discover-block">
-      <div class="discover-block-head"><h3 id="allGamesTitle">ALL GAMES</h3></div>
-      <div class="game-grid" id="discoverGames"></div>
-    </div>
-  </section>
-
-  <section class="wrap" id="sobre-mi">
-    <div class="section-head">
-      <span class="path">~/felipe/</span>
-      <h2 id="secSobre">sobre-mi<span class="ext">.js</span></h2>
-    </div>
-    <div class="about-grid">
-      <div id="aboutCopy"></div>
-      <div class="console-quote">
-        <span class="lead">></span> <span id="quoteLead">console.log(objetivo);</span>
-        <p class="q" id="quoteBody"></p>
-      </div>
-    </div>
-  </section>
-
-  <section class="wrap" id="habilidades">
-    <div class="section-head">
-      <span class="path">~/felipe/</span>
-      <h2 id="secSkills">habilidades<span class="ext">.css</span></h2>
-    </div>
-    <div class="imports" id="skills"></div>
-  </section>
-
-  <section class="wrap" id="objetivos">
-    <div class="section-head">
-      <span class="path">~/felipe/</span>
-      <h2 id="secGoals">objetivos<span class="ext">.md</span></h2>
-    </div>
-    <div class="roadmap" id="roadmap"></div>
-  </section>
-
-  <section class="wrap" id="donaciones">
-    <div class="section-head">
-      <span class="path">~/felipe/</span>
-      <h2 id="secDonate">donaciones<span class="ext">.json</span></h2>
-    </div>
-    <div class="pix">
-      <h3 id="pixTitle">Apóyame con PIX</h3>
-      <p class="hint" id="pixHint">Elige un monto, escanea el QR o copia la clave.</p>
-      <div class="pix-amounts">
-        <button class="pix-amount active" data-src="qr/1.jpeg">R$5</button>
-        <button class="pix-amount" data-src="qr/2.jpeg">R$10</button>
-        <button class="pix-amount" data-src="qr/3.jpeg">R$15</button>
-        <button class="pix-amount" data-src="qr/4.jpeg">R$20</button>
-      </div>
-      <img id="pixImage" src="qr/1.jpeg" alt="QR PIX" />
-      <button class="btn" id="copyPix" style="margin-top:16px;width:100%;justify-content:center;">Copiar clave PIX</button>
-    </div>
-  </section>
-
-  <footer id="footer">hecho por Felipe · sin anuncios, por elección</footer>
-  <script src="games-config.js"></script>
-  <script src="app.js"></script>
-  <script src="discover.js"></script>
-</body>
-</html>
+</head><body><div class="noise"></div>
+<nav class="tabbar" id="tabbar"><div class="brand"><span class="dot"></span> felipe.dev</div><div class="tabs">
+  <button class="tab active" data-target="#inicio"><span class="ext-html">&lt;/&gt;</span> index.html</button><button class="tab" data-target="#sitios"><span class="ext-js">[]</span> sitios.json</button><button class="tab" data-target="#discover"><span class="ext-js">*</span> discover.js</button><a class="tab-link" href="free-browser-games.html"><span class="ext-html">[]</span> games.html</a><button class="tab" data-target="#sobre-mi"><span class="ext-js">JS</span> sobre-mi.js</button><button class="tab" data-target="#habilidades"><span class="ext-html">{}</span> habilidades.css</button><button class="tab" data-target="#objetivos"><span class="ext-md">#</span> objetivos.md</button><button class="tab" data-target="#donaciones"><span class="ext-js">$</span> donaciones.json</button>
+</div><div class="langs" id="langs"><button type="button" data-lang="es" class="active">ES</button><button type="button" data-lang="pt">PT</button><button type="button" data-lang="en">EN</button></div></nav>
+<header class="wrap" id="inicio"><div class="editor"><div class="titlebar"><span class="tl"></span><span class="tl"></span><span class="tl"></span><span class="filename">index.html — felipe.dev</span></div><div class="editor-body"><div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6</div><div class="code"><div class="cm" id="heroComment"><!-- perfil de desarrollador --></div><div><span class="kw">const</span> <span class="fn">dev</span> = {</div><div>&nbsp;&nbsp;<span class="prop">nombre:</span> <span class="str">"Felipe"</span>,</div><div>&nbsp;&nbsp;<span class="prop">edad:</span> <span class="str">14</span>,</div><div>&nbsp;&nbsp;<span class="prop">stack:</span> [<span class="str">"HTML"</span>, <span class="str">"JavaScript"</span>]</div><div>};</div></div></div></div><h1 class="name" id="typedName">Felipe</h1><p class="tagline" id="heroTagline"></p><div class="ctas"><a href="#sitios" class="btn primary" id="ctaProjects">Ver proyectos</a><a href="#donaciones" class="btn" id="ctaDonate">Donar</a></div></header>
+<section class="wrap" id="sitios"><div class="section-head"><span class="path">~/felipe/</span><h2 id="secSitios">sitios<span class="ext">.json</span></h2></div><div class="filters" id="filters"></div><div class="sites-grid" id="sitesGrid"></div></section>
+<section class="wrap discover-section" id="discover"><div class="section-head"><span class="path">~/felipe/</span><h2><span id="discoverTitle">DISCOVER</span><span class="ext">.js</span></h2></div><p class="discover-subtitle" id="discoverSubtitle">Find your next favorite game.</p><div id="discoverFeatured"></div><div class="discover-toolbar"><div class="game-search-wrap"><span>⌕</span><input id="gameSearch" type="search" placeholder="Search games..." autocomplete="off" /></div><div class="discover-filters" id="discoverFilters"></div></div><div class="discover-block"><div class="discover-block-head"><h3 id="newReleasesTitle">NEW RELEASES</h3><a href="free-browser-games.html" class="mini-link">VIEW ALL →</a></div><div class="game-grid" id="newReleasesGames"></div></div><div class="discover-block"><div class="discover-block-head"><h3 id="allGamesTitle">ALL GAMES</h3></div><div class="game-grid" id="discoverGames"></div></div></section>
+<section class="wrap" id="sobre-mi"><div class="section-head"><span class="path">~/felipe/</span><h2 id="secSobre">sobre-mi<span class="ext">.js</span></h2></div><div class="about-grid"><div id="aboutCopy"></div><div class="console-quote"><span class="lead">></span> <span id="quoteLead">console.log(objetivo);</span><p class="q" id="quoteBody"></p></div></div></section>
+<section class="wrap" id="habilidades"><div class="section-head"><span class="path">~/felipe/</span><h2 id="secSkills">habilidades<span class="ext">.css</span></h2></div><div class="imports" id="skills"></div></section>
+<section class="wrap" id="objetivos"><div class="section-head"><span class="path">~/felipe/</span><h2 id="secGoals">objetivos<span class="ext">.md</span></h2></div><div class="roadmap" id="roadmap"></div></section>
+<section class="wrap" id="donaciones"><div class="section-head"><span class="path">~/felipe/</span><h2 id="secDonate">donaciones<span class="ext">.json</span></h2></div><div class="pix"><h3 id="pixTitle">Apóyame con PIX</h3><p class="hint" id="pixHint">Elige un monto, escanea el QR o copia la clave.</p><div class="pix-amounts"><button class="pix-amount active" data-src="qr/1.jpeg">R$5</button><button class="pix-amount" data-src="qr/2.jpeg">R$10</button><button class="pix-amount" data-src="qr/3.jpeg">R$15</button><button class="pix-amount" data-src="qr/4.jpeg">R$20</button></div><img id="pixImage" src="qr/1.jpeg" alt="QR PIX" /><button class="btn" id="copyPix" style="margin-top:16px;width:100%;justify-content:center;">Copiar clave PIX</button></div></section>
+<footer id="footer">hecho por Felipe · sin anuncios, por elección</footer><script src="games-config.js"></script><script src="app.js"></script><script src="discover.js"></script></body></html>
